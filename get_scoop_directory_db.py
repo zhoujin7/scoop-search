@@ -6,7 +6,7 @@ import requests
 
 scoop_directory_db = Path(__file__).resolve().parent.joinpath('scoop_directory.db')
 scoop_directory_db_bak = Path(__file__).resolve().parent.joinpath('scoop_directory.db.bak')
-if Path(scoop_directory_db).exists():
+if Path(scoop_directory_db).exists() and Path(scoop_directory_db).stat().st_size != 0:
     copy2(scoop_directory_db, scoop_directory_db_bak)
 with open(scoop_directory_db, 'wb') as file:
     try:
