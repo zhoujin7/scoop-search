@@ -1,0 +1,6 @@
+.idea/
+venv/
+__pycache__
+*.iml
+scoop_directory.db
+scoop_directory.db.bak
