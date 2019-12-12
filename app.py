@@ -20,6 +20,7 @@ def search():
             scoop_apps = conn.execute(
                 "SELECT * FROM main.app WHERE name LIKE ? ORDER BY version DESC", ('%' + app_name + '%',)
             ).fetchall()
+        conn.close()
 
         def max_length_of_line(arr):
             max_len = 0
@@ -57,9 +58,6 @@ def search():
             else:
                 query_result += f'{app_names[i]}\t{app_versions[i]}\t{app_bucket_repos[i]}'
             i += 1
-
-        conn.close()
-
         return query_result
     else:
         return ''
