@@ -4,3 +4,4 @@ __pycache__
 *.iml
 scoop_directory.db
 scoop_directory.db.bak
+desktop.ini
