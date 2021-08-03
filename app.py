@@ -19,10 +19,9 @@ def search():
         db_bak = Path(__file__).resolve().parent.joinpath('scoop_directory.db.bak')
         if (not Path(db).exists() or Path(db).stat().st_size == 0) and Path(db_bak).exists() and Path(db_bak).stat().st_size != 0:
             copy2(db_bak, db)
-        else:
+        if not Path(db).exists() or Path(db).stat().st_size == 0:
             get_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
             subprocess.Popen(['python3', get_db])
-            return 'Error! scoop_directory.db does not exist.'
         conn = sqlite3.connect(db)
         with conn:
             scoop_apps = conn.execute(
