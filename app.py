@@ -19,6 +19,10 @@ def search():
         db_bak = Path(__file__).resolve().parent.joinpath('scoop_directory.db.bak')
         if (not Path(db).exists() or Path(db).stat().st_size == 0) and Path(db_bak).exists() and Path(db_bak).stat().st_size != 0:
             copy2(db_bak, db)
+        else:
+            get_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
+            subprocess.Popen(['python3', get_db])
+            return 'Error! scoop_directory.db does not exist.'
         conn = sqlite3.connect(db)
         with conn:
             scoop_apps = conn.execute(
@@ -64,7 +68,7 @@ def search():
             i += 1
         return query_result
     else:
-        return ''
+        return 'No result.'
 
 
 @app.route('/update_db', methods=['POST'])
@@ -72,8 +76,8 @@ def update_db():
     secret = os.environ.get("GITHUB_WEBHOOK_SECRET")
     signature_header = request.headers.get('X-Hub-Signature')
     if is_validated(secret, signature_header, request.data):
-        get_scoop_directory_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
-        subprocess.Popen(['python3', get_scoop_directory_db])
+        get_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
+        subprocess.Popen(['python3', get_db])
         return {'result': 'success'}
     return {'result': 'fail'}
 
