@@ -22,6 +22,7 @@ def search():
         if not Path(db).exists() or Path(db).stat().st_size == 0:
             get_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
             subprocess.Popen(['python3', get_db])
+            return 'Error: scoop_directory.db does not exist.'
         conn = sqlite3.connect(db)
         with conn:
             scoop_apps = conn.execute(
