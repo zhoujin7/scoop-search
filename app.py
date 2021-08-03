@@ -67,7 +67,7 @@ def search():
             i += 1
         return query_result
     else:
-        return 'No result.'
+        return 'Please specify app name.'
 
 
 @app.route('/update_db', methods=['POST'])
