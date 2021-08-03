@@ -3,9 +3,8 @@ import hmac
 import os
 import sqlite3
 import subprocess
-from pathlib import Path
-
 from flask import Flask, request
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -15,6 +14,9 @@ def search():
     app_name = request.get_json().get('app_name')
     if app_name:
         scoop_directory_db = Path(__file__).resolve().parent.joinpath('scoop_directory.db')
+        scoop_directory_db_bak = Path(__file__).resolve().parent.joinpath('scoop_directory.db.bak')
+        if not Path(scoop_directory_db).exists() or Path(scoop_directory_db).stat().st_size == 0:
+            copy2(scoop_directory_db_bak, scoop_directory_db)
         conn = sqlite3.connect(scoop_directory_db)
         with conn:
             scoop_apps = conn.execute(
