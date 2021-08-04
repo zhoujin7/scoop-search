@@ -23,12 +23,19 @@ def search():
             get_db = Path(__file__).resolve().parent.joinpath('get_scoop_directory_db.py')
             subprocess.Popen(['python3', get_db])
             return 'Error: scoop_directory.db does not exist.'
-        conn = sqlite3.connect(db)
-        with conn:
-            scoop_apps = conn.execute(
-                "SELECT * FROM main.app WHERE name LIKE ? ORDER BY version DESC", ('%' + app_name + '%',)
-            ).fetchall()
-        conn.close()
+
+        sql = "SELECT * FROM main.app WHERE name LIKE ? ORDER BY version DESC"
+        try:
+            conn = sqlite3.connect(db)
+            with conn:
+                scoop_apps = conn.execute(sql, ('%' + app_name + '%',)).fetchall()
+        except Exception as e:
+            try:
+                conn2 = sqlite3.connect(db_bak)
+                with conn2:
+                    scoop_apps = conn2.execute(sql, ('%' + app_name + '%',)).fetchall()
+            except Exception as e2:
+                raise e2
 
         def max_length_of_line(arr):
             max_len = 0
